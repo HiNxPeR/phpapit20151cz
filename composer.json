@@ -1,0 +1,19 @@
+{
+    "config": {
+        "vendor-dir": "lib"
+    },
+    "autoload":{
+        "psr-4":{
+            "Config\\":"Config",
+            "Models\\":"Models", 
+            "Controllers\\":"Controllers",
+            "Utils\\":"Utils",
+            "Tonic\\":"lib/peej/tonic"
+        }
+    },
+    "require": {
+        "peej/tonic": "v3.2",
+         "doctrine/orm": "2.4.3",
+         "apache/log4php": "2.3.0"
+    }
+}

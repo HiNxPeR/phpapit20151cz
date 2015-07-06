@@ -1,0 +1,13 @@
+; this is an INI file
+; Renombrar por .ini
+[db]
+key = value
+driver = <driver de la base de datos> (Mysql: pdo_mysql; PostgresSQL: pdo_pgsql)
+user = <USUARIO DE BASE DE DATOS>
+password = <PASSWORD DEL USUARIO DE BASE DE DATOS>
+dbname = <NOMBRE DE BASE DE DATOS>
+host = <host>
+port = <puerto>
+
+[doctrine]
+mappingsPath = /Models/mappings/

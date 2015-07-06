@@ -1,0 +1,33 @@
+Ejemplo de archivo sites-available/<el nombre que quieras>
+esta configuración funciona en linux
+
+
+server {
+    listen 80;
+    server_name <URL>;
+    
+    index dispatch.php;
+
+    root <directorio donde se descomprimieron los fuentes>; 
+    
+    #rescritura y redireccion
+    #Esto prueba si $uri es un archivo, un directorio y si nada de eso existe, redirige a dispatch.php
+        location / {
+        try_files $uri $uri/ /dispatch.php$is_args$args;    
+    }
+   
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        location ~ \.php$ {
+            #fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+    
+             # With php5-cgi alone:
+            #fastcgi_pass 127.0.0.1:9000;
+            # With php5-fpm:
+                try_files $uri =404;
+                fastcgi_pass unix:/var/run/php5-fpm.sock;
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}

@@ -1,0 +1,10 @@
+<doctrine-mapping>
+  <entity name="Models\User" table="apit.users">	
+	<id name="id" column="id">
+		<generator strategy="AUTO"/>
+	</id>	
+    <field name="login" column="login" nullable="false"/>
+    <field name="name"  column="name" nullable="false" />
+    <field name="password" column="password" nullable="false"/>
+  </entity>
+</doctrine-mapping>

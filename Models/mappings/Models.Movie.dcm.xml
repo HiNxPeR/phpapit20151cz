@@ -1,0 +1,16 @@
+<doctrine-mapping>
+  <entity name="Models\Movie" table="apit.movies">	
+	<id name="id" column="id">
+		<generator strategy="AUTO"/>
+	</id>	
+    <field name="title" column="title" nullable="false"/>
+    <field name="description"  column="description" nullable="false" />
+    <field name="releaseDate" column="date" />
+    <field name="director" column="directorname" />
+    <field name="duration" column="duration" />
+    <field name="writter" column="writername" />
+    <field name="stars" column="stars" />
+    <field name="actors" column="actors" />
+  </entity>
+</doctrine-mapping>
+
