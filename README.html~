@@ -1,0 +1,435 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Made with Remarkable!
+  </title>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css" rel="stylesheet"/>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js">
+  </script>
+  <script>
+   hljs.initHighlightingOnLoad();
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   MathJax.Hub.Config({"showProcessingMessages" : false,"messageStyle" : "none","tex2jax": { inlineMath: [ [ "$", "$" ] ] }});
+  </script>
+  <style type="text/css">
+   body{font:16px Helvetica,Arial,sans-serif;line-height:1.4;color:#333;word-wrap:break-word;background-color:#fff;padding:10px 15px}strong{font-weight:700}h1{font-size:2em;margin:.67em 0;text-align:center}h2{font-size:1.75em}h3{font-size:1.5em}h4{font-size:1.25em}h1,h2,h3,h4,h5,h6{font-weight:700;position:relative;margin-top:15px;margin-bottom:15px;line-height:1.1}h1,h2{border-bottom:1px solid #eee}hr{height:0;margin:15px 0;overflow:hidden;background:0 0;border:0;border-bottom:1px solid #ddd}a{color:#4183C4}a.absent{color:#c00}ol,ul{padding-left:15px;margin-left:5px}ol{list-style-type:lower-roman}table{padding:0}table tr{border-top:1px solid #ccc;background-color:#fff;margin:0;padding:0}table tr:nth-child(2n){background-color:#aaa}table tr th{font-weight:700;border:1px solid #ccc;text-align:left;margin:0;padding:6px 13px}table tr td{border:1px solid #ccc;text-align:left;margin:0;padding:6px 13px}table tr td :first-child,table tr th :first-child{margin-top:0}table tr td:last-child,table tr th :last-child{margin-bottom:0}img{max-width:100%}code{padding:0 5px;background-color:#d3d3d3}blockquote{padding: 0 15px;border-left:4px solid #ccc}
+  </style>
+ </head>
+ <body id="MathPreviewF">
+  <h1 id="instalacion">
+   Instalación
+  </h1>
+  <ol>
+   <li>
+    Descomprimir los fuentes en el directorio que se desee.
+   </li>
+   <li>
+    Ejecutar php composer.phar install. Este paso puede obviarse si el directorio lib/ no se encuentra vacío.
+   </li>
+   <li>
+    Renombrar el archivo Config/config_desc.txt por Config/config.ini
+    <ol>
+     <li>
+      Editar todo lo que está entre &lt;&gt; con el valor que corresponda según el entorno
+     </li>
+    </ol>
+   </li>
+   <li>
+    Configurar servidor web para que sirva el directorio donde se instalaron los fuentes.
+    <ol>
+     <li>
+      Configurar de forma tal que todos los pedidos se redirijan a dispatch.php. Se adjuntan ejemplos de configuración para apache y nginx en directorio Installer.
+     </li>
+    </ol>
+   </li>
+   <li>
+    Crear Base de Datos. Se adjuntan scripts de creación en directorio Installer.
+    <ol>
+     <li>
+      Crear un usuario en la base de datos
+     </li>
+     <li>
+      Para el password utilizar md5. Ejemplo: insert into users(login, name, password) select ‘user1’, ‘usuario’, md5(‘mi_clave’);
+     </li>
+    </ol>
+   </li>
+   <li>
+    Dar permisos de escritura sobre el directorio
+    <em>
+     log
+    </em>
+    y su contenido.
+   </li>
+  </ol>
+  <h1 id="autenticacion">
+   Autenticación
+  </h1>
+  <p>
+   El mecanismo de autenticación es HTTP Basic, por lo que se debe enviar en el header de cada pedido usuario y contraseña.
+  </p>
+  <h1 id="api-rest">
+   API ReST
+  </h1>
+  <h2 id="coleccion-de-peliculas">
+   Colección de películas
+  </h2>
+  <table>
+   <thead>
+    <tr>
+     <th>
+      = Verbo =
+     </th>
+     <th>
+      = URL =
+     </th>
+     <th>
+      = Parámetros =
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td>
+      GET
+     </td>
+     <td>
+      FQDN/movies
+     </td>
+     <td>
+      offset; limit; field; value
+     </td>
+    </tr>
+   </tbody>
+  </table>
+  <ul>
+   <li>
+    offset: registro a partir del cual se desea devolver en la rta.
+   </li>
+   <li>
+    limit: cantidad de registros a devolver
+   </li>
+   <li>
+    field: propiedad por la cual se quiere filtrar
+   </li>
+   <li>
+    <p>
+     value: valor para filtrar
+    </p>
+   </li>
+   <li>
+    <p>
+     <strong>
+      Respuesta:
+     </strong>
+    </p>
+    <blockquote>
+     <pre><code>  {
+        "meta": {
+            "description": "Colección de Películas",
+            "totalCount": &lt;cantidad total de películas&gt;,
+            "offset": &lt;offset seteado&gt;,
+            "limit": &lt;limit seteado&gt;,
+            "next": &lt;href de la próxima página&gt;,
+            "previous": &lt;href de la página previa&gt;
+        },
+        "items": [
+            &lt;objeto con propiedades de la película. Ver "Consulta de 1 película"&gt;
+         ]
+}
+</code></pre>
+    </blockquote>
+   </li>
+  </ul>
+  <h2 id="consulta-de-1-pelicula">
+   Consulta de 1 película
+  </h2>
+  <table>
+   <thead>
+    <tr>
+     <th>
+      = Verbo =
+     </th>
+     <th>
+      = URL =
+     </th>
+     <th>
+      = Parámetros =
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td>
+      GET
+     </td>
+     <td>
+      FQDN/movies/id
+     </td>
+     <td>
+      -
+     </td>
+    </tr>
+   </tbody>
+  </table>
+  <ul>
+   <li>
+    <p>
+     id es el id de la película a consultar
+    </p>
+   </li>
+   <li>
+    <p>
+     <strong>
+      Respuesta:
+     </strong>
+    </p>
+    <blockquote>
+     <pre><code>  {
+        "title": &lt;titulo de la película&gt;,
+        "description": &lt;resumen de la película&gt;,
+        "releaseDate": &lt;fecha de estreno&gt;,
+        "director": &lt;director&gt;,
+        "duration": &lt;duración en minutos&gt;,
+        "writter": &lt;escritor&gt;,
+        "stars": &lt;puntuación (entero)&gt;,
+        "actors": [&lt;actor_1&gt;, ..., &lt;actor_n&gt;],
+        "href": &lt;link para acceder al recurso. Relativo al FQDN&gt;
+    }
+</code></pre>
+    </blockquote>
+   </li>
+  </ul>
+  <h2 id="crear-una-pelicula">
+   Crear una película
+  </h2>
+  <table>
+   <thead>
+    <tr>
+     <th>
+      = Verbo =
+     </th>
+     <th>
+      = URL =
+     </th>
+     <th>
+      = Parámetros =
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td>
+      POST
+     </td>
+     <td>
+      FQDN/movies/
+     </td>
+     <td>
+      -
+     </td>
+    </tr>
+   </tbody>
+  </table>
+  <ul>
+   <li>
+    <p>
+     <strong>
+      Datos del pedido
+     </strong>
+    </p>
+    <blockquote>
+     <pre><code>  {
+        "title": &lt;titulo de la película&gt;,
+        "description": &lt;resumen de la película&gt;,
+        "releaseDate": &lt;fecha de estreno&gt;,
+        "director": &lt;director&gt;,
+        "duration": &lt;duración en minutos&gt;,
+        "writter": &lt;escritor&gt;,
+        "stars": &lt;puntuación (entero)&gt;,
+        "actors": [&lt;actor_1&gt;, ..., &lt;actor_n&gt;],
+        "href": null
+    }
+</code></pre>
+    </blockquote>
+   </li>
+   <li>
+    <p>
+     <strong>
+      Respuesta
+     </strong>
+    </p>
+    <blockquote>
+     <ul>
+      <li>
+       Idem Respuesta de una consulta.
+      </li>
+     </ul>
+    </blockquote>
+   </li>
+  </ul>
+  <h2 id="modificar-una-pelicula">
+   Modificar una película
+  </h2>
+  <table>
+   <thead>
+    <tr>
+     <th>
+      = Verbo =
+     </th>
+     <th>
+      = URL =
+     </th>
+     <th>
+      = Parámetros =
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td>
+      PUT
+     </td>
+     <td>
+      FQDN/movies/id
+     </td>
+     <td>
+      -
+     </td>
+    </tr>
+   </tbody>
+  </table>
+  <ul>
+   <li>
+    <p>
+     id es el id de la película a consultar
+    </p>
+   </li>
+   <li>
+    <p>
+     <strong>
+      Datos del pedido
+     </strong>
+    </p>
+    <blockquote>
+     <pre><code>  {
+        "title": &lt;titulo de la película&gt;,
+        "description": &lt;resumen de la película&gt;,
+        "releaseDate": &lt;fecha de estreno&gt;,
+        "director": &lt;director&gt;,
+        "duration": &lt;duración en minutos&gt;,
+        "writter": &lt;escritor&gt;,
+        "stars": &lt;puntuación (entero)&gt;,
+        "actors": [&lt;actor_1&gt;, ..., &lt;actor_n&gt;],
+        "href": null
+    }
+</code></pre>
+    </blockquote>
+   </li>
+   <li>
+    <p>
+     href no es tenido en cuenta. Siempre se calcula de forma automática.
+    </p>
+   </li>
+   <li>
+    <p>
+     <strong>
+      Respuesta
+     </strong>
+     :
+    </p>
+    <blockquote>
+     <pre><code>  {
+        "title": &lt;titulo de la película&gt;,
+        "description": &lt;resumen de la película&gt;,
+        "releaseDate": &lt;fecha de estreno&gt;,
+        "director": &lt;director&gt;,
+        "duration": &lt;duración en minutos&gt;,
+        "writter": &lt;escritor&gt;,
+        "stars": &lt;puntuación (entero)&gt;,
+        "actors": [&lt;actor_1&gt;, ..., &lt;actor_n&gt;],
+        "href": null
+    }
+</code></pre>
+    </blockquote>
+   </li>
+  </ul>
+  <h2 id="eliminar-una-pelicula">
+   Eliminar una película
+  </h2>
+  <table>
+   <thead>
+    <tr>
+     <th>
+      = Verbo =
+     </th>
+     <th>
+      = URL =
+     </th>
+     <th>
+      = Parámetros =
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td>
+      DELETE
+     </td>
+     <td>
+      FQDN/movies/id
+     </td>
+     <td>
+      -
+     </td>
+    </tr>
+   </tbody>
+  </table>
+  <ul>
+   <li>
+    <p>
+     id es el id de la película a consultar
+    </p>
+   </li>
+   <li>
+    <p>
+     <strong>
+      Respuesta:
+     </strong>
+    </p>
+    <blockquote>
+     <pre><code>  {
+        "message": "Película eliminada.",
+        "code": 200,
+        "href": null
+}
+</code></pre>
+    </blockquote>
+   </li>
+  </ul>
+  <h2 id="respuesta-en-caso-de-errores">
+   Respuesta en caso de errores:
+  </h2>
+  <blockquote>
+   <p>
+    Las respuestas devolverán el código HTTP correspondiente y en el cuerpo de la misma devolverán:
+   </p>
+   <pre><code>  {
+        "message": &lt;mensaje de error&gt;,
+        "code": &lt;código HTTP&gt;,
+        "href": null
+}
+</code></pre>
+  </blockquote>
+  <h1 id="arquitectura-de-alto-nivel">
+   Arquitectura de alto nivel
+  </h1>
+  <p>
+   <img alt="" src="/media/files/Documents/Facultad/apit/Arquitectura.gif"/>
+  </p>
+ </body>
+</html>
